@@ -45,12 +45,22 @@
 /* Tailwind v4 theme variables */
 @theme {
   --color-light-gray-wash: #EFF1F6;
-  --color-wasmer-darker-grey: #8C8893;
+  --color-wasmer-darker-grey: #6E6974FF;
   --color-wasmer-border-grey: #D8D6DA;
   --color-input-bg: #E4E5EA;
-  --color-input-text: #7A7682;
+  --color-input-text: #63606BFF;
   --color-wasmer-border: #c2c2ca;
   --color-wasmer-text: #0f0518;
+
+  /* Code block semantic colors */
+  --color-code-bg: #8e8a93ff;
+  --color-code-header: #282a36;
+  --color-code-text: #cf8431ff;
+  --color-code-comment: #969696ff;
+  --color-code-keyword: #ffffff;
+  --color-code-string: #50fa7b;
+  --color-code-variable: #8c8aff;
+  --color-code-number: #f1fa8c;
 }
 
 /* Base layer for global element styles */
@@ -62,13 +72,37 @@
     --primary-foreground: 210 40% 98%;
     --ring: 222.2 84% 4.9%;
     --radius: 0.5rem;
+
+    /* Responsive design tokens */
+    --line-position: 450px;
+    --line-position-mobile: 440px;
+    --line-thickness: 1px;
+    --top-color: #EBEFF5;
+    --border-color: #D3D9E0;
+
+    /* Shared background pattern */
+    --wasmer-gradient:
+      linear-gradient(to bottom,
+        var(--top-color) calc(var(--line-position) - var(--line-thickness)),
+        var(--border-color) calc(var(--line-position) - var(--line-thickness)),
+        var(--border-color) var(--line-position)),
+      linear-gradient(180deg,
+        #FCFCFE 0%,
+        #EFF1F6 100%);
+    --wasmer-bg-size: 100% var(--line-position), 100% 100%;
   }
 
   body {
     font-family: 'Gilroy', sans-serif;
     font-weight: 500;
+    background: var(--wasmer-gradient);
+    background-size: var(--wasmer-bg-size);
+    background-repeat: no-repeat, no-repeat;
     background-color: var(--color-light-gray-wash);
     color: var(--color-wasmer-darker-grey);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
   }
 
   nav {
@@ -98,9 +132,8 @@
 
   /* Button hover styles */
   button:hover:not(.btn-rounded) {
-    @apply border border-wasmer-darker-grey border-2 bg-light-gray-wash;
+    @apply bg-light-gray-wash;
   }
-
 
   /* Ensure buttons and links with no-underline don't get underline on focus */
   a.hover\:no-underline:focus-visible {
@@ -113,11 +146,10 @@
 
   /* Button base styles */
   .btn-rounded {
-    @apply flex h-7 items-center justify-center whitespace-nowrap rounded-full border border-wasmer-border font-semibold text-wasmer-text transition-colors duration-200 hover:border-[1.2px] hover:border-black hover:bg-white hover:no-underline;
+    @apply flex h-7 items-center justify-center whitespace-nowrap rounded-full border border-wasmer-border font-semibold text-wasmer-text transition-colors duration-200 hover:border-black hover:bg-white hover:no-underline;
   }
-}
 
-@layer components {
+  /* Header border utility */
   .header-full-border {
     @apply relative;
   }
@@ -126,4 +158,98 @@
     @apply absolute bottom-0 left-0 right-0 h-px bg-wasmer-border-grey w-screen -translate-x-1/2;
     left: 50%;
   }
+
+  /* Code block components */
+  .code-block-container {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    @apply rounded-xl overflow-hidden;
+    background-color: #1e1e2e;
+    color: #f8f8f2;
+    box-shadow: 0px 0.4px 7.43px 0px #23104400, 0px 1.12px 10.03px 0px #23104404, 0px 2.69px 15.79px 0px #2310440D, 0px 8.91px 38.63px 0px #2310440D;
+  }
+
+  .code-block-header {
+    @apply px-4 py-2 font-mono text-sm flex justify-between items-center;
+    background-color: var(--color-code-header);
+    color: var(--color-code-comment);
+  }
+
+  .code-content {
+    @apply p-4 text-sm font-mono;
+    line-height: 1.5;
+    color: var(--color-code-text);
+  }
+
+  .line-number {
+    color: var(--color-code-comment);
+    user-select: none;
+    @apply mr-6 inline-block w-2;
+  }
+
+  .key {
+    color: var(--color-code-keyword);
+  }
+
+  .string {
+    color: var(--color-code-string);
+  }
+
+  .section {
+    color: var(--color-code-variable);
+  }
+
+  .comment {
+    color: var(--color-code-number);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  :root {
+    --line-position: var(--line-position-mobile);
+  }
+
+  .deploy-page {
+    background: var(--wasmer-gradient);
+    background-size: var(--wasmer-bg-size);
+    background-repeat: no-repeat, no-repeat;
+  }
+
+  .code-content {
+    @apply p-4 text-sm font-mono;
+    line-height: 1.5;
+  }
+
+  .line-number {
+    color: #6272a4;
+    user-select: none;
+    @apply mr-6 inline-block w-2;
+  }
+
+  .key {
+    color: #ff79c6;
+  }
+
+  .string {
+    color: #50fa7b;
+  }
+
+  .section {
+    color: #bd93f9;
+  }
+
+  .code-content code {
+    color: #f8f8f2;
+  }
+
+  .comment {
+    color: #f1fa8c;
+  }
+}
+
+.shadow-wasmer {
+  box-shadow: 0px 0.4px 7.43px 0px #23104400;
+  box-shadow: 0px 1.12px 10.03px 0px #23104404;
+  box-shadow: 0px 2.69px 15.79px 0px #2310440D;
+  box-shadow: 0px 8.91px 38.63px 0px #2310440D;
 }

@@ -2,6 +2,8 @@ import Image from "next/image";
 
 export default function Home() {
   return (
+
+   
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
         <Image
@@ -12,6 +14,41 @@ export default function Home() {
           height={20}
           priority
         />
+
+        <a href="#">Back to templates</a>
+        <h1 className="text-3xl font-bold">Next.js Starter</h1>
+        <p>Serve your static  Next.js apps with Wasmer</p>
+
+        <aside>
+          <h2>Next.js Starter</h2>
+          <section>
+            <button>Deploy</button>
+            <button>Visit Demo</button>
+          </section>
+
+          <hr />
+          <h3>Framework</h3>
+          <p>Next.js</p>
+          <h3>Language</h3>
+          <p>JavaScript</p>
+          <h3>Powered by package</h3>
+          <p>wasmer/static-web-server</p>
+
+           <hr />
+
+           <a href="#">Browse all templates</a>
+        </aside>
+
+        <section>
+
+          <div>BLOCK</div>
+
+          <p>The power of Wasmer relies on delivering one universal API to run WebAssembly programs anywhere. On that quest, we worked hard to extend Wasmer by adding support for more backends, starting with JavaScriptCore. Today are incredibly excited to ship JSC support in Wasmer v3.3.</p>
+          
+
+          <code>BLOCK</code>
+        </section>
+
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
             To get started, edit the page.tsx file.

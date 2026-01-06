@@ -27,8 +27,35 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header>
+
+          <img src="/wasmer-logo.svg" alt="Wasmer" />
+          <label for="site-search">Search packages, users or apps</label>
+          <input type="search" id="site-search" name="q" />
+
+          <nav><ul>
+            <li>Products</li>
+            <li>Developers</li>
+            <li>Blog</li>
+            <li>Templates</li>
+            <li>GitHub</li>
+            <li>Discord</li>
+            <li>Sign in</li>
+          </ul></nav>
+
+        </header>
         {children}
       </body>
+
+      <footer>
+        <img src="/wasmer-logo.svg" alt="Wasmer" />
+        <p>Making software universally accessible</p>
+        <ul>
+          <li>Imprint</li>
+          <li>Privacy</li>
+          <li>Terms</li>
+        </ul>
+      </footer>
     </html>
   );
 }

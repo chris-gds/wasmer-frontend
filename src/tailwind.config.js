@@ -19,6 +19,8 @@ module.exports = {
     extend: {
       // Add custom styles for Shadcn/MagicUI here
       colors: {
+        "light-gray-wash": '#EFF1F6',
+        "wasmer-darker-grey": '#8C8893',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -28,7 +30,7 @@ module.exports = {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
-        // ... add more as needed
+       
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -49,7 +51,9 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      fontFamily: {
+        sans: ['Gilroy', 'system-ui'],
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")], // Add if using animations
 }

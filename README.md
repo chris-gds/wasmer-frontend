@@ -79,7 +79,7 @@ For this task, we encourage use of:
 
 ## ⚠️ Important Notes
 
-All the code should be made in Typescript, and should be passing the TS checks (please ensure `pnpm run build` works peroperly. Code should be deployed to Vercel for demonstration of the progress.
+All the code should be made in Typescript, and should be passing the TS checks (please ensure `pnpm run build` works properly. Code should be deployed to Vercel for demonstration of the progress.
 
 Each time that you change a GraphQL query, don’t forget to run `pnpm run relay`
 
@@ -96,3 +96,10 @@ Output the progress after 8 hours of work have passed, and after 16 hours. If mo
 [Designs](/_designs/AppCreationFlow.pdf)
 
 ---
+
+## Notes 
+
+- Colours were changes to ensure they pass contrast checks
+- The Github button was aligned to a primary button
+- Focus states and others were chosen
+- Mutiple comments left on figmas

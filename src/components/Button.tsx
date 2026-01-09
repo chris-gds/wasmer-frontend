@@ -16,7 +16,7 @@ import { ReactNode } from "react";
 interface ButtonProps {
   href?: string;
   label: ReactNode;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "disabled";
   onClick?: () => void;
   className?: string;
   disabled?: boolean;

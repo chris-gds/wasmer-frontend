@@ -29,7 +29,6 @@ export const DEPLOY_MUTATION = `
   }
 `;
 
-// Query to get app deployment status by name
 export const APP_STATUS_QUERY = `
   query GetAppStatus($owner: String!, $name: String!) {
     getDeployApp(owner: $owner, name: $name) {
@@ -45,24 +44,6 @@ export const APP_STATUS_QUERY = `
   }
 `;
 
-// Alternative: Query using node interface (Relay-style)
-export const NODE_QUERY = `
-  query GetNode($id: ID!) {
-    node(id: $id) {
-      id
-      ... on DeployApp {
-        name
-        url
-        activeVersion {
-          id
-          version
-        }
-      }
-    }
-  }
-`;
-
-// Query to get user info (namespace)
 export const VIEWER_QUERY = `
   query GetViewer {
     viewer {
@@ -84,7 +65,7 @@ export interface CreateRepoResponse {
 export interface ViewerResponse {
   viewer: {
     username: string;
-  };
+  } | null;
 }
 
 export interface DeployResponse {
@@ -145,10 +126,13 @@ class WasmerApiClient {
   private token: string;
 
   constructor(token: string) {
-    if (!token) {
-      throw new Error("WASMER_AUTH_TOKEN is required");
+    if (!token || token.trim() === "") {
+      throw new Error(
+        "WASMER_AUTH_TOKEN is required and cannot be empty. " +
+        "Please add a valid token to your .env.local file."
+      );
     }
-    this.token = token;
+    this.token = token.trim();
   }
 
   /**
@@ -190,6 +174,14 @@ class WasmerApiClient {
    */
   async getViewer(): Promise<string> {
     const data = await this.execute<ViewerResponse>(VIEWER_QUERY);
+    
+    if (!data.viewer || !data.viewer.username) {
+      throw new Error(
+        "Invalid Wasmer Token: Wasmer could not identify the user. " +
+        "Please verify your token at https://wasmer.io/settings/access-tokens"
+      );
+    }
+    
     return data.viewer.username;
   }
 
@@ -231,7 +223,6 @@ class WasmerApiClient {
 
   /**
    * Get app deployment status (for polling)
-   * Polls by app name since buildId query doesn't exist
    */
   async getAppStatus(owner: string, appName: string): Promise<AppStatus> {
     const data = await this.execute<AppStatusResponse>(APP_STATUS_QUERY, {
@@ -242,7 +233,6 @@ class WasmerApiClient {
     const app = data.getDeployApp;
     
     if (!app) {
-      // App not found yet - still deploying
       return {
         id: "",
         name: appName,
@@ -252,8 +242,6 @@ class WasmerApiClient {
       };
     }
 
-    // If app exists and has an active version, it's deployed
-    // Get URL from activeVersion since DeployApp.url can be null during deployment
     const url = app.activeVersion?.url || `https://${appName}.wasmer.app`;
     
     return {
@@ -278,13 +266,12 @@ class WasmerApiClient {
     // Step A: Create repository from template
     const { repoId } = await this.createRepoFromTemplate(appName, namespace, templateId);
 
-    // Construct the repo URL from the repoId (format: github.com/namespace/name)
+    // Construct the repo URL
     const repoUrl = `https://github.com/${namespace}/${appName}`;
 
     // Step B: Deploy via autobuild
     const buildId = await this.deployViaAutobuild(repoUrl, namespace, appName);
 
-    // Step C: Return the buildId to the frontend
     return {
       buildId,
       repoId,
@@ -303,8 +290,8 @@ export function createWasmerClient(): WasmerApiClient {
 
   if (!token) {
     throw new Error(
-      "WASMER_AUTH_TOKEN environment variable is not set. " +
-        "Please add it to your .env.local file."
+      "Environment variable WASMER_AUTH_TOKEN is missing. " +
+      "Please add it to your .env.local file or environment configuration."
     );
   }
 

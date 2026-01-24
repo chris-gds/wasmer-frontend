@@ -21,12 +21,6 @@ export interface DeployResponseBody {
  * 1. Creates a repo from the app template
  * 2. Deploys via autobuild
  * 3. Returns the buildId for monitoring
- *
- * Request body:
- * {
- *   "appName": "my-awesome-app",
- *   "templateId": "at_r2yGI9t3ConA" // optional, defaults to this value
- * }
  */
 export async function POST(
   request: NextRequest
@@ -38,7 +32,7 @@ export async function POST(
       return NextResponse.json(
         {
           success: false,
-          error: "Wasmer Auth Token not configured",
+          error: "Environment variable WASMER_AUTH_TOKEN is missing. Please configure it in your environment.",
         },
         { status: 500 }
       );
@@ -58,14 +52,13 @@ export async function POST(
       );
     }
 
-    // Validate appName format (alphanumeric, hyphens, underscores)
+    // Validate appName format
     const appNameRegex = /^[a-zA-Z0-9][a-zA-Z0-9-_]{0,62}$/;
     if (!appNameRegex.test(body.appName)) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "appName must start with alphanumeric and contain only alphanumeric characters, hyphens, or underscores (max 63 chars)",
+          error: "appName must start with alphanumeric and contain only alphanumeric characters, hyphens, or underscores (max 63 chars)",
         },
         { status: 400 }
       );
@@ -90,14 +83,14 @@ export async function POST(
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error occurred";
 
-    // Check for specific error types
-    if (errorMessage.includes("WASMER_AUTH_TOKEN")) {
+    // Return specific status codes based on error type
+    if (errorMessage.includes("WASMER_AUTH_TOKEN") || errorMessage.includes("Invalid Wasmer Token")) {
       return NextResponse.json(
         {
           success: false,
-          error: "Server configuration error: Missing authentication token",
+          error: errorMessage,
         },
-        { status: 500 }
+        { status: 401 }
       );
     }
 

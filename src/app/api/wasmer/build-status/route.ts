@@ -9,17 +9,6 @@ export interface AppStatusResponseBody {
 
 /**
  * GET /api/wasmer/build-status?owner=<owner>&appName=<appName>
- *
- * Polling endpoint to check the status of an app deployment.
- * Use this to monitor deployment progress until completion.
- *
- * Query parameters:
- * - owner: The owner/namespace of the app
- * - appName: The name of the app being deployed
- *
- * Suggested polling strategy:
- * - Poll every 3 seconds
- * - Stop when status is SUCCESS or FAILED
  */
 export async function GET(
   request: NextRequest
@@ -31,18 +20,16 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: "Wasmer Auth Token not configured",
+          error: "Environment variable WASMER_AUTH_TOKEN is missing.",
         },
         { status: 500 }
       );
     }
 
-    // Get params from query
     const { searchParams } = new URL(request.url);
     const owner = searchParams.get("owner");
     const appName = searchParams.get("appName");
 
-    // Validate params
     if (!owner || !appName) {
       return NextResponse.json(
         {
@@ -53,7 +40,6 @@ export async function GET(
       );
     }
 
-    // Create Wasmer client and fetch app status
     const client = createWasmerClient();
     const appStatus = await client.getAppStatus(owner, appName);
 
@@ -67,14 +53,13 @@ export async function GET(
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error occurred";
 
-    // Check for specific error types
-    if (errorMessage.includes("WASMER_AUTH_TOKEN")) {
+    if (errorMessage.includes("WASMER_AUTH_TOKEN") || errorMessage.includes("Invalid Wasmer Token")) {
       return NextResponse.json(
         {
           success: false,
-          error: "Server configuration error: Missing authentication token",
+          error: errorMessage,
         },
-        { status: 500 }
+        { status: 401 }
       );
     }
 

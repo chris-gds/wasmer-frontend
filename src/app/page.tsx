@@ -5,23 +5,8 @@ import Link from "next/link";
 import { TemplateCard } from "@/components/TemplateCard";
 import { CodeBlock } from "@/components/CodeBlock";
 import { Button } from "@/components/Button";
-import { useEffect, useState } from "react";
 
 function MainPage() {
-  const [appUrl, setAppUrl] = useState<string | null>(null);
-
-  // Force-success debug flag (set NEXT_PUBLIC_FORCE_DEPLOY_SUCCESS=true)
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_FORCE_DEPLOY_SUCCESS === "true") {
-      setStatus("SUCCESS");
-      setAppUrl("https://example.wasmer.app");
-      setLogs((prev) => [
-        ...prev,
-        `[${new Date().toLocaleTimeString()}] ✅ Deployment successful! Your app is live at https://example.wasmer.app`,
-      ]);
-    }
-  }, []);
-
   return (
     <div className="relative flex min-h-screen items-center justify-center">
       {/* Content overlay */}

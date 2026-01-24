@@ -27,11 +27,23 @@ export default function DeployPage() {
   const [logs, setLogs] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [appUrl, setAppUrl] = useState<string | null>(null);
-  
+
+  // Force-success debug flag (set NEXT_PUBLIC_FORCE_DEPLOY_SUCCESS=true)
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_FORCE_DEPLOY_SUCCESS === "true") {
+      setStatus("SUCCESS");
+      setAppUrl("https://example.wasmer.app");
+      setLogs((prev) => [
+        ...prev,
+        `[${new Date().toLocaleTimeString()}] ✅ Deployment successful! Your app is live at https://example.wasmer.app`,
+      ]);
+    }
+  }, []);
+
   // Hidden template ID (changes based on selected template)
   const [selectedTemplate] = useState("wordpress");
   const templateId = TEMPLATE_IDS[selectedTemplate];
-  
+
   // Refs
   const logsEndRef = useRef<HTMLDivElement>(null);
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,7 +91,7 @@ export default function DeployPage() {
       }
 
       const app = data.app;
-      
+
       // Log current status for debugging
       console.log("App status:", app);
 
@@ -126,7 +138,7 @@ export default function DeployPage() {
       // Simulate connection validation
       // In production, you'd call an API to verify the token
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       setStatus("CONNECTED");
       setGitScope("wasmer-user"); // This would come from the API response
       addLog("✅ GitHub connection validated");
@@ -182,19 +194,19 @@ export default function DeployPage() {
       addLog(`✅ Repository created with ID: ${data.repoId}`);
       addLog(`👤 Owner: ${data.owner}`);
       addLog(`🚀 Build started with ID: ${data.buildId}`);
-      
+
       // Transition to deploying state and start polling
       setStatus("DEPLOYING");
       addLog("📡 Starting deployment monitoring...");
-      
+
       // Start polling for app status (using owner and appName)
       const owner = data.owner;
       const appName = repositoryName;
-      
+
       pollingRef.current = setInterval(() => {
         pollAppStatus(owner, appName);
       }, 3000);
-      
+
       // Initial poll
       pollAppStatus(owner, appName);
 
@@ -257,7 +269,7 @@ export default function DeployPage() {
                     <Button
                       href={`https://wasmer.io/apps`}
                       label="Dashboard"
-                      variant="primary"
+                      variant="primaryLarge"
                     />   
                 </div>
               ) : (
@@ -326,7 +338,8 @@ export default function DeployPage() {
           {/* Main content */}
           <section className="flex-1 space-y-8">
             {/* Get started card */}
-            <div className="bg-white rounded-lg border border-wasmer-border-grey mt-6 p-6 lg:mt-0 shadow-wasmer">
+            {!isSuccess && (
+              <div className="bg-white rounded-lg border border-wasmer-border-grey mt-6 p-6 lg:mt-0 shadow-wasmer">
               <h2 className="text-[22px] font-bold text-wasmer-text mb-4">Get started</h2>
               <p className="text-wasmer-darker-grey text-m">
                 Wasmer Edge is the easiest way to deploy websites.
@@ -355,12 +368,14 @@ export default function DeployPage() {
                   disabled={status === "CONNECTING" || isConnected}
                 />
               </div>
-            </div>
+              </div>
+            )}
 
             {/* Create Git Repository card */}
-            <div className={`bg-white rounded-lg border border-wasmer-border-grey p-6 shadow-wasmer mt-1 transition-opacity ${
-              !isConnected ? "opacity-50 pointer-events-none" : ""
-            }`}>
+            {!isSuccess && (
+              <div className={`bg-white rounded-lg border border-wasmer-border-grey p-6 shadow-wasmer mt-1 transition-opacity ${
+                !isConnected ? "opacity-50 pointer-events-none" : ""
+              }`}>
               <h2 className="text-[22px] font-bold text-wasmer-text mb-6">Create Git Repository</h2>
 
               <div className="space-y-4">
@@ -419,7 +434,8 @@ export default function DeployPage() {
                   />
                 </div>
               </div>
-            </div>
+              </div>
+            )}
 
             {/* Deploy card */}
             <div className={`bg-white rounded-lg border border-wasmer-border-grey p-6 shadow-wasmer transition-opacity ${
@@ -427,7 +443,8 @@ export default function DeployPage() {
             }`}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className={`text-xl font-bold ${isRepoCreated ? "text-wasmer-text" : "text-wasmer-darker-grey"}`}>
-                  Deploy
+                  {isSuccess ? "Deployed" : "Deploy"}
+                    
                 </h2>
                 {isSuccess && appUrl && (
                   <a

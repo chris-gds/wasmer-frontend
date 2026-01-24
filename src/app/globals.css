@@ -253,3 +253,28 @@
   box-shadow: 0px 2.69px 15.79px 0px #2310440D;
   box-shadow: 0px 8.91px 38.63px 0px #2310440D;
 }
+
+/* Animated loader */
+.loader {
+  width: 20px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ffffff;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  animation: loader-animation 2s infinite cubic-bezier(0.3, 1, 0, 1);
+}
+
+.loader--black { 
+  background: #000000;
+}
+
+@keyframes loader-animation {
+  33% {
+    border-radius: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  66% {
+    border-radius: 0;
+    clip-path: polygon(50% 0, 50% 0, 100% 100%, 0 100%);
+  }
+}

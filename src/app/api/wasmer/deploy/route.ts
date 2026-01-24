@@ -32,6 +32,18 @@ export async function POST(
   request: NextRequest
 ): Promise<NextResponse<DeployResponseBody>> {
   try {
+    // Check if Wasmer auth token is configured
+    const token = process.env.WASMER_AUTH_TOKEN;
+    if (!token) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Wasmer Auth Token not configured",
+        },
+        { status: 500 }
+      );
+    }
+
     // Parse request body
     const body: DeployRequestBody = await request.json();
 

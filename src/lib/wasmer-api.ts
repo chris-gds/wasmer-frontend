@@ -162,7 +162,7 @@ class WasmerApiClient {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Token ${this.token}`,
       },
       body: JSON.stringify({ query, variables }),
     });

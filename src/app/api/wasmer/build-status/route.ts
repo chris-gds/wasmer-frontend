@@ -25,6 +25,18 @@ export async function GET(
   request: NextRequest
 ): Promise<NextResponse<AppStatusResponseBody>> {
   try {
+    // Check if Wasmer auth token is configured
+    const token = process.env.WASMER_AUTH_TOKEN;
+    if (!token) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Wasmer Auth Token not configured",
+        },
+        { status: 500 }
+      );
+    }
+
     // Get params from query
     const { searchParams } = new URL(request.url);
     const owner = searchParams.get("owner");

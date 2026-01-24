@@ -51,8 +51,6 @@ export function Button({
   const variants = {
     primary:
       "w-full border-wasmer-text bg-wasmer-text text-white hover:bg-white hover:text-wasmer-text disabled:cursor-not-allowed",
-    primaryLarge:
-      "w-full border-wasmer-text text-xl h-11 bg-wasmer-text text-white hover:bg-white hover:text-wasmer-text disabled:cursor-not-allowed mb-4",
     secondary:
       "w-full border-wasmer-border-grey bg-white text-wasmer-text hover:bg-wasmer-text hover:text-white hover:border-wasmer-text disabled:cursor-not-allowed",
     disabled:

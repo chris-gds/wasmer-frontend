@@ -231,7 +231,7 @@ export default function DeployPage() {
   // ============================================
   const getCurrentStep = () => {
     if (status === "SUCCESS") return 3;
-    if (isRepoCreated || status === "DEPLOYING") return 2;
+    if (isRepoCreated) return 2;
     if (isConnected) return 1;
     return 0;
   };
@@ -269,7 +269,8 @@ export default function DeployPage() {
                     <Button
                       href={`https://wasmer.io/apps`}
                       label="Dashboard"
-                      variant="primaryLarge"
+                      variant="primary"
+                      className="h-12 px-5"
                     />   
                 </div>
               ) : (

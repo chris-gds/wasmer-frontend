@@ -430,7 +430,7 @@ export default function DeployPage() {
                     }
                     variant={canCreateRepo ? "primary" : "disabled"}
                     onClick={handleCreateRepo}
-                    disabled={!canCreateRepo || status === "CREATING_REPO"}
+                    disabled={!canCreateRepo || isRepoCreated}
                     className={isRepoCreated ? "lg:!w-[190px]" : "lg:!w-[190px]"}
                   />
                 </div>
@@ -440,7 +440,7 @@ export default function DeployPage() {
 
             {/* Deploy card */}
             <div className={`bg-white rounded-lg border border-wasmer-border-grey p-6 shadow-wasmer transition-opacity ${
-              !isRepoCreated && status !== "DEPLOYING" ? "opacity-50" : ""
+              !isRepoCreated ? "opacity-50" : ""
             }`}>
               <div className="flex items-center justify-between mb-4">
                 <h2 className={`text-xl font-bold ${isRepoCreated ? "text-wasmer-text" : "text-wasmer-darker-grey"}`}>
@@ -493,7 +493,7 @@ export default function DeployPage() {
                 </div>
               )}
 
-              {!isRepoCreated && status !== "DEPLOYING" && (
+              {!isRepoCreated && (
                 <p className="text-wasmer-darker-grey text-sm">
                   Create a repository first to enable deployment.
                 </p>

@@ -103,3 +103,7 @@ Output the progress after 8 hours of work have passed, and after 16 hours. If mo
 - The Github button was aligned to a primary button
 - Focus states and others were chosen
 - Mutiple comments left on figmas
+
+##
+
+https://github.com/user-attachments/assets/04fb4fa2-2156-4f0b-9684-ade349bc5320

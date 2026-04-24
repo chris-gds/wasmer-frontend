@@ -107,3 +107,7 @@ Output the progress after 8 hours of work have passed, and after 16 hours. If mo
 ##
 
 https://github.com/user-attachments/assets/04fb4fa2-2156-4f0b-9684-ade349bc5320
+
+##  Outcome
+
+Compensated pro-rata for time 🔥 but after 3 months of no real sign of an offer - moved on 🤷‍♂️
